@@ -1,0 +1,25 @@
+
+<div fxLayout="row" fxLayoutAlign="center baseline"
+     fxLayoutGap="20px" fxLayoutGap.lt-md="5px">
+  <mat-form-field appearance="outline" class="auto-width">
+    <mat-label>Search Type</mat-label>
+    <mat-select name="searchType" [disabled]="disabled"
+                [ngModel]="searchData.searchType"
+                (ngModelChange)="onSearchTypeChanged($event)">
+      <mat-option value="all">All</mat-option>
+      <mat-option value="title">Title</mat-option>
+      <mat-option value="actor">Actor</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field fxFlex="90">
+    <mat-label>Search Keyword</mat-label>
+    <input matInput type="text" [disabled]="disabled" (keyup.enter)="onSearch()"
+           [placeholder]="placeholders.get(searchData.searchType)"
+           [(ngModel)]="searchData.keyword">
+  </mat-form-field>
+  <div fxFlex fxLayoutAlign="end">
+    <button mat-raised-button fxHide.lt-md [disabled]="disabled || !searchData.keyword">
+      <mat-icon>search</mat-icon>
+    </button>
+  </div>
+</div>
