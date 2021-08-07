@@ -12,7 +12,12 @@ import {environment} from "../environments/environment";
 export class AppComponent {
   title = 'Movies Go'
   movie_searching = false
+  movie_search_result: any = undefined
+  movie_search_error: any = undefined
+
   now_showing_searching = false
+  now_showing_result: any = undefined
+  now_showing_error: any = undefined
 
   constructor(private movieSearcher: TheMovieDbSearchService,
               private nowShowingSearcher: MovieGluSearchService) {
@@ -23,15 +28,16 @@ export class AppComponent {
 
   onSearchMovieComplete(result: any) {
     this.movie_searching = false
-    console.log(result)
+    this.movie_search_result = result
   }
 
   onSearchMovieError(msg: string) {
     this.movie_searching = false
-    console.log(msg)
+    this.movie_search_error = msg
   }
 
   onSearchMovie(data: SearchData) {
+    this.movie_search_result = undefined
     this.movie_searching = true
     this.movieSearcher.search(data)
       .subscribe({
@@ -42,15 +48,16 @@ export class AppComponent {
 
   onSearchNowShowingComplete(result: any) {
     this.now_showing_searching = false
-    console.log(result)
+    this.now_showing_result = result
   }
 
   onSearchNowShowingError(msg: string) {
     this.now_showing_searching = false
-    console.log(msg)
+    this.now_showing_error = msg
   }
 
   onSearchNowShowing() {
+    this.now_showing_result = undefined
     this.now_showing_searching = true
     this.nowShowingSearcher.searchNowShowing().subscribe(
       (data) => this.onSearchNowShowingComplete(data),

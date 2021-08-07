@@ -54,8 +54,9 @@ export class TheMovieDbSearchService {
     return `${this.configuration.images.base_url}/${this.configuration.images.poster_sizes[0]}`
   }
 
-  search(data: any) {
+  search(data: any): Observable<any> {
     this.options.params.query = data.keyword
+    this.options.params.page = data.page || 1
     let response: Observable<any>
     if (data.searchType === 'title')
       response = this.searchTitle()
