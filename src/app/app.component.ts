@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import {SearchData} from "./movie-search/movie-search.component";
 import {TheMovieDbSearchService} from "./themoviedb-search.service";
+import {MovieGluSearchService} from "./movieglu-search.service";
 import {environment} from "../environments/environment";
 
 @Component({
@@ -10,28 +11,50 @@ import {environment} from "../environments/environment";
 })
 export class AppComponent {
   title = 'Movies Go'
-  searching = false
+  movie_searching = false
+  now_showing_searching = false
 
-  constructor(private searcher: TheMovieDbSearchService) {
-    this.searcher.api_key = environment.the_movie_db_apikey
+  constructor(private movieSearcher: TheMovieDbSearchService,
+              private nowShowingSearcher: MovieGluSearchService) {
+    this.movieSearcher.api_key = environment.the_movie_db_apikey
+    this.nowShowingSearcher.api_key = environment.movie_glu_apikey
+    this.nowShowingSearcher.auth = environment.movie_glu_auth
   }
 
-  onSearchComplete(result: any) {
-    this.searching = false
+  onSearchMovieComplete(result: any) {
+    this.movie_searching = false
     console.log(result)
   }
 
-  onSearchError(msg: string) {
-    this.searching = false
+  onSearchMovieError(msg: string) {
+    this.movie_searching = false
     console.log(msg)
   }
 
-  onSearch(data: SearchData) {
-    this.searching = true
-    this.searcher.search(data)
+  onSearchMovie(data: SearchData) {
+    this.movie_searching = true
+    this.movieSearcher.search(data)
       .subscribe({
-        next: (data) => this.onSearchComplete(data),
-        error: (err) => this.onSearchError(err.message),
+        next: (data) => this.onSearchMovieComplete(data),
+        error: (err) => this.onSearchMovieError(err.message),
       })
+  }
+
+  onSearchNowShowingComplete(result: any) {
+    this.now_showing_searching = false
+    console.log(result)
+  }
+
+  onSearchNowShowingError(msg: string) {
+    this.now_showing_searching = false
+    console.log(msg)
+  }
+
+  onSearchNowShowing() {
+    this.now_showing_searching = true
+    this.nowShowingSearcher.searchNowShowing().subscribe(
+      (data) => this.onSearchNowShowingComplete(data),
+      (err) => this.onSearchNowShowingError(err)
+    )
   }
 }
