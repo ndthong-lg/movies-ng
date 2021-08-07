@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import {SearchData} from "./movie-search/movie-search.component";
 
 @Component({
   selector: 'app-root',
@@ -6,5 +7,10 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.sass']
 })
 export class AppComponent {
-  title = 'movies-ng';
+  title = 'Movies Go'
+  searching = false
+
+  onSearch(data: SearchData) {
+
+  }
 }
