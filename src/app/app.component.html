@@ -1,12 +1,30 @@
 
-<div fxLayout="column" fxLayout.lt-md="column"
-     fxLayoutAlign="space-around center" fxLayoutAlign.lt-md="space-around start"
-     fxLayoutGap="20px" fxLayoutGap.lt-md="0px"
-     style="padding: 5px; margin: 10px; border: 1px solid #24292e">
-  <app-movie-search fxFlexFill [disabled]="movie_searching" (search)="onSearchMovie($event)"></app-movie-search>
+<mat-tab-group>
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon class="main-tab-icon">search</mat-icon>
+      Movie Search
+    </ng-template>
+    <div class="main-tab" fxLayout="row" fxLayoutAlign="start stretch">
+      <div fxHide.xs fxFlex="3 3 10" fxFlex.gt-sm="20"></div>
+      <div fxFlex.xs="100" fxFlex="80" fxFlex.gt-sm="60"
+           fxLayout="column" fxLayoutAlign="space-around stretch"
+           fxLayoutGap="0px" fxLayoutGap.lt-md="0px">
+        <app-movie-search fxFlex="100" [disabled]="movie_searching" (search)="onSearchMovie($event)"></app-movie-search>
+        <div style="height: 10px;" *ngIf="movie_searching||true;">
+          <mat-progress-bar  fxFlex mode="indeterminate" color="accent"></mat-progress-bar>
+        </div>
+      </div>
+      <div fxHide.xs fxFlex="3 3 10" fxFlex.gt-sm="20"></div>
+    </div>
+  </mat-tab>
 
-  <div *ngIf="movie_searching;" fxFlexFill>
-    <mat-progress-bar mode="indeterminate" color="accent"></mat-progress-bar>
-  </div>
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon class="main-tab-icon">movie</mat-icon>
+      Now Showing
+    </ng-template>
 
-</div>
+  </mat-tab>
+</mat-tab-group>
+
