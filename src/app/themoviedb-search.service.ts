@@ -10,7 +10,6 @@ export class TheMovieDbSearchService {
 
   set api_key(key: string) {
     this.options.params.api_key = key
-    this.getConfiguration()
   }
 
   options = {
@@ -24,34 +23,44 @@ export class TheMovieDbSearchService {
     }
   }
 
+  configuration: any
+
   constructor(private http: HttpClient) { }
 
-  private configuration: any
   private configurationURL = 'https://api.themoviedb.org/3/configuration'
-  private getConfiguration() {
-    this.http.get(`${this.configurationURL}?api_key=${this.options.params.api_key}`)
+  getConfiguration(): Observable<any> {
+    return this.http.get(`${this.configurationURL}?api_key=${this.options.params.api_key}`)
       .pipe(
-        map( (data) => JSON.parse(JSON.stringify(data)) ),
+        map( (data) => {
+          this.configuration = JSON.parse(JSON.stringify(data))
+          this.configuration.getProfileBaseURL = function() {
+            return `${this.images.base_url}/${this.images.profile_sizes[0]}`
+          }
+          this.configuration.getLogoBaseURL = function() {
+            return `${this.images.base_url}/${this.images.logo_sizes[0]}`
+          }
+          this.configuration.getPosterBaseURL = function() {
+            return `${this.images.base_url}/${this.images.poster_sizes[0]}`
+          }
+          return this.configuration
+        } ),
         catchError( (err) => {
           console.log(`${err.status} - ${err.statusText}: ${err.error.status_message}`)
           return of([])
         })
       )
-      .subscribe( (config) => {
-        this.configuration = config
-      })
   }
 
-  getProfileBaseURL() {
-    return `${this.configuration.images.base_url}/${this.configuration.images.profile_sizes[0]}`
-  }
-
-  getLogoBaseURL() {
-    return `${this.configuration.images.base_url}/${this.configuration.images.logo_sizes[0]}`
-  }
-
-  getPosterBaseURL() {
-    return `${this.configuration.images.base_url}/${this.configuration.images.poster_sizes[0]}`
+  private genresURL = 'https://api.themoviedb.org/3/genre/movie/list'
+  getGenres(): Observable<any> {
+    return this.http.get(`${this.genresURL}?api_key=${this.options.params.api_key}`)
+      .pipe(
+        map( (data) => JSON.parse(JSON.stringify(data)).genres ),
+        catchError((err) => {
+          console.log(`${err.status} - ${err.statusText}: ${err.error.status_message}`)
+          return of([])
+        })
+      )
   }
 
   search(data: any): Observable<any> {
