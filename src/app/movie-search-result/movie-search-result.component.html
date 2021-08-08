@@ -1,0 +1,57 @@
+
+<div fxLayout="column" fxLayoutAlign="start stretch"
+     fxLayoutGap="20px" fxLayout.lt-md="10px">
+  <div class="mat-primary" *ngIf="error"
+       fxLayout="column" fxLayoutAlign="start stretch" fxLayoutGap="20px">
+    <h3>Search Error</h3>
+    <div class="mat-error" fxLayout="row" fxLayoutAlign="start center">
+      <mat-icon>error</mat-icon> {{error}}
+    </div>
+    <div fxLayout="row" fxLayoutAlign="start center">
+      <button mat-raised-button (click)="onRetry()">Retry</button>
+    </div>
+  </div>
+  <div class="mat-primary" *ngIf="result" fxFlex="100"
+       fxLayout="column" fxLayoutAlign="start stretch" fxLayoutGap="20px">
+    <h3 fxShow fxHide.xs>Found {{ result.total_results }} result(s) for "{{ data.keyword }}"</h3>
+    <h3 fxHide fxShow.xs>Found {{ result.total_results }} result(s)</h3>
+    <div *ngFor="let r of result.results;" class="movie-item"
+         fxLayout="row" fxLayoutAlign="start stretch" fxLayoutGap="5px">
+      <div><img class="movie-poster" [src]="paths[0].concat(r.poster_path)"></div>
+      <div fxFlex fxLayout="column" fxLayoutAlign="start stretch">
+        <div fxHide="">{{ r.id }}</div>
+        <div><mat-icon class="movie-icon">movie</mat-icon>{{ r.original_title }}</div>
+        <div fxLayout="row wrap">
+          <div class="movie-info" fxLayoutAlign="start center"><mat-icon class="movie-icon">date_range</mat-icon> {{ r.release_date}}</div>
+          <div class="movie-info" fxLayoutAlign="start center"><mat-icon class="movie-icon">language</mat-icon> {{ r.original_language | uppercase }}</div>
+          <div class="movie-info" fxLayoutAlign="start center"><mat-icon class="movie-icon">people</mat-icon> {{ r.popularity }}</div>
+          <div class="movie-info" fxLayoutAlign="start center"><mat-icon class="movie-icon">favorite</mat-icon> {{ r.vote_average }}</div>
+          <div class="movie-info" fxLayout="row wrap" fxLayoutAlign="start center"><mat-icon class="movie-icon">turned_in</mat-icon>
+            <span *ngFor="let g_id of r.genre_ids; let idx = index">
+              {{ getGenre(g_id) }}<span *ngIf="idx != r.genre_ids.length-1;">,&nbsp;</span>
+            </span>
+          </div>
+        </div>
+        <div fxShow fxHide.xs><mat-icon class="movie-icon">spellcheck</mat-icon> {{ r.overview | slice:0:500 }}...</div>
+        <div fxHide fxShow.xs><mat-icon class="movie-icon">spellcheck</mat-icon> {{ r.overview | slice:0:100 }}...</div>
+      </div>
+    </div>
+    <div fxShow fxHide.xs>
+      <mat-paginator showFirstLastButtons="true"
+                     [pageIndex]="result.page-1"
+                     [length]="result.total_results"
+                     [pageSize]="result.results.length"
+                     (page)="onPage($event.pageIndex)">
+      </mat-paginator>
+    </div>
+    <div fxHide fxShow.xs>
+      <mat-paginator showFirstLastButtons="false"
+                     hidePageSize="true"
+                     [pageIndex]="result.page-1"
+                     [length]="result.total_results"
+                     [pageSize]="result.results.length"
+                     (page)="onPage($event.pageIndex)">
+      </mat-paginator>
+    </div>
+  </div>
+</div>
