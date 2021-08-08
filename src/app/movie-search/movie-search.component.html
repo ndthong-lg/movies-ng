@@ -18,7 +18,8 @@
            [(ngModel)]="searchData.keyword">
   </mat-form-field>
   <div fxFlex fxLayoutAlign="end">
-    <button mat-raised-button fxHide.lt-md [disabled]="disabled || !searchData.keyword">
+    <button mat-raised-button fxHide.lt-md
+            [disabled]="disabled || !searchData.keyword" (click)="onSearch()">
       <mat-icon>search</mat-icon>
     </button>
   </div>
