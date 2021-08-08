@@ -15,25 +15,42 @@
        fxLayout="column" fxLayoutAlign="start stretch" fxLayoutGap="20px">
     <h3 fxShow fxHide.xs>Found {{ result.total_results }} result(s) for "{{ data.keyword }}"</h3>
     <h3 fxHide fxShow.xs>Found {{ result.total_results }} result(s)</h3>
-    <div *ngFor="let r of result.results;" class="movie-item"
+    <div *ngIf="data && data.searchType === 'title'">
+      <div *ngFor="let r of result.results;" class="movie-item"
          fxLayout="row" fxLayoutAlign="start stretch" fxLayoutGap="5px">
-      <div><img class="movie-poster" [src]="paths[0].concat(r.poster_path)"></div>
-      <div fxFlex fxLayout="column" fxLayoutAlign="start stretch">
-        <div fxHide="">{{ r.id }}</div>
-        <div><mat-icon class="movie-icon">movie</mat-icon>{{ r.original_title }}</div>
-        <div fxLayout="row wrap">
-          <div class="movie-info" fxLayoutAlign="start center"><mat-icon class="movie-icon">date_range</mat-icon> {{ r.release_date}}</div>
-          <div class="movie-info" fxLayoutAlign="start center"><mat-icon class="movie-icon">language</mat-icon> {{ r.original_language | uppercase }}</div>
-          <div class="movie-info" fxLayoutAlign="start center"><mat-icon class="movie-icon">people</mat-icon> {{ r.popularity }}</div>
-          <div class="movie-info" fxLayoutAlign="start center"><mat-icon class="movie-icon">favorite</mat-icon> {{ r.vote_average }}</div>
-          <div class="movie-info" fxLayout="row wrap" fxLayoutAlign="start center"><mat-icon class="movie-icon">turned_in</mat-icon>
-            <span *ngFor="let g_id of r.genre_ids; let idx = index">
-              {{ getGenre(g_id) }}<span *ngIf="idx != r.genre_ids.length-1;">,&nbsp;</span>
-            </span>
+        <div><img class="movie-poster" [src]="paths[0].concat(r.poster_path)"></div>
+        <div fxFlex fxLayout="column" fxLayoutAlign="start stretch">
+          <div fxHide="">{{ r.id }}</div>
+          <div><mat-icon class="movie-icon">movie</mat-icon>{{ r.original_title }}</div>
+          <div fxLayout="row wrap">
+            <div class="movie-info" fxLayoutAlign="start center"><mat-icon class="movie-icon">date_range</mat-icon> {{ r.release_date}}</div>
+            <div class="movie-info" fxLayoutAlign="start center"><mat-icon class="movie-icon">language</mat-icon> {{ r.original_language | uppercase }}</div>
+            <div class="movie-info" fxLayoutAlign="start center"><mat-icon class="movie-icon">people</mat-icon> {{ r.popularity }}</div>
+            <div class="movie-info" fxLayoutAlign="start center"><mat-icon class="movie-icon">favorite</mat-icon> {{ r.vote_average }}</div>
+            <div class="movie-info" fxLayout="row wrap" fxLayoutAlign="start center"><mat-icon class="movie-icon">turned_in</mat-icon>
+              <span *ngFor="let g_id of r.genre_ids; let idx = index">
+                {{ getGenre(g_id) }}<span *ngIf="idx != r.genre_ids.length-1;">,&nbsp;</span>
+              </span>
+            </div>
+          </div>
+          <div fxShow fxHide.xs><mat-icon class="movie-icon">spellcheck</mat-icon> {{ r.overview | slice:0:500 }}...</div>
+          <div fxHide fxShow.xs><mat-icon class="movie-icon">spellcheck</mat-icon> {{ r.overview | slice:0:100 }}...</div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="data && data.searchType === 'actor'"
+      fxLayout="row wrap" fxLayoutGap="10px" fxLayoutAlign="start start">
+      <div *ngFor="let r of result.results;" class="movie-item" fxFlex="200px"
+           fxLayout="row" fxLayoutAlign="start stretch" fxLayoutGap="5px">
+        <div><img class="people-profile" [src]="paths[1].concat(r.profile_path)"></div>
+        <div fxFlex fxLayout="column" fxLayoutAlign="start stretch">
+          <div fxHide="">{{ r.id }}</div>
+          <div><b>{{ r.name }}</b></div>
+          <div fxLayout="row wrap">
+            <div class="movie-info" fxLayoutAlign="start center"><mat-icon class="movie-icon">people</mat-icon> {{ r.popularity }}</div>
+            <div class="movie-info" fxLayoutAlign="start center"><mat-icon class="movie-icon">record_voice_over</mat-icon> {{ r.known_for_department }}</div>
           </div>
         </div>
-        <div fxShow fxHide.xs><mat-icon class="movie-icon">spellcheck</mat-icon> {{ r.overview | slice:0:500 }}...</div>
-        <div fxHide fxShow.xs><mat-icon class="movie-icon">spellcheck</mat-icon> {{ r.overview | slice:0:100 }}...</div>
       </div>
     </div>
     <div fxShow fxHide.xs>
