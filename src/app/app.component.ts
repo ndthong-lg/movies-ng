@@ -18,9 +18,16 @@ export class AppComponent implements OnInit {
   movie_search_paths: string[] = []
   movie_search_genres: any = {}
 
+  now_showing_num = 2
   now_showing_searching = false
   now_showing_result: any = undefined
   now_showing_error: any = undefined
+  now_showing_cinemas = new Map<string, Array<any>>()
+
+  geolocation = {
+    lat: '40.7579',
+    lng: '-73.9878',
+  }
 
   constructor(private movieSearcher: TheMovieDbSearchService,
               private nowShowingSearcher: MovieGluSearchService) {
@@ -37,6 +44,14 @@ export class AppComponent implements OnInit {
 
     this.movieSearcher.getGenres().subscribe( (genres) => {
       this.movie_search_genres = genres
+    })
+
+    navigator.geolocation.getCurrentPosition((position) => {
+      console.log(position)
+      this.geolocation = {
+        lat: position.coords.latitude.toFixed(6),
+        lng: position.coords.longitude.toFixed(6),
+      }
     })
   }
 
@@ -72,9 +87,11 @@ export class AppComponent implements OnInit {
       })
   }
 
+  // ------------
+
   onSearchNowShowingComplete(result: any) {
     this.now_showing_searching = false
-    this.now_showing_result = result
+    this.now_showing_result = result.films
   }
 
   onSearchNowShowingError(msg: string) {
@@ -85,9 +102,17 @@ export class AppComponent implements OnInit {
   onSearchNowShowing() {
     this.now_showing_result = undefined
     this.now_showing_searching = true
-    this.nowShowingSearcher.searchNowShowing().subscribe(
+    this.nowShowingSearcher.searchNowShowing(this.now_showing_num).subscribe(
       (data) => this.onSearchNowShowingComplete(data),
       (err) => this.onSearchNowShowingError(err)
+    )
+  }
+
+  onSearchNowShowingCinemas(film_id: string) {
+    this.nowShowingSearcher.searchClosetShowing(
+      film_id, 5, this.geolocation.lat, this.geolocation.lng).subscribe(
+      (data) => this.now_showing_cinemas.set(film_id, data.cinemas),
+      () => this.now_showing_cinemas.set(film_id, [])
     )
   }
 }

@@ -9,12 +9,15 @@ import {MovieSearchComponent} from "./movie-search/movie-search.component";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
 import {MovieSearchResultComponent} from "./movie-search-result/movie-search-result.component";
+import {NowShowingSearchResultComponent} from "./now-showing-search-result/now-showing-search-result.component";
+import {GoogleMapsModule} from "@angular/google-maps";
 
 @NgModule({
   declarations: [
     AppComponent,
     MovieSearchComponent,
     MovieSearchResultComponent,
+    NowShowingSearchResultComponent,
   ],
   imports: [
     BrowserModule,
@@ -24,6 +27,7 @@ import {MovieSearchResultComponent} from "./movie-search-result/movie-search-res
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
+    GoogleMapsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

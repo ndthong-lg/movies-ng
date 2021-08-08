@@ -1,5 +1,5 @@
 
-<mat-tab-group>
+<mat-tab-group selectedIndex="1">
   <mat-tab>
     <ng-template mat-tab-label>
       <mat-icon class="main-tab-icon">search</mat-icon>
@@ -38,7 +38,30 @@
       <mat-icon class="main-tab-icon">movie</mat-icon>
       Now Showing
     </ng-template>
-
+    <div class="main-tab" fxLayout="row" fxLayoutAlign="start stretch">
+      <div fxHide.xs fxFlex="3 3 10" fxFlex.gt-sm="20"></div>
+      <div fxFlex.xs="100" fxFlex="80" fxFlex.gt-sm="60"
+           fxLayout="column" fxLayoutAlign="space-around stretch"
+           fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
+        <h1>Now Showing</h1>
+        <div>
+          <button mat-raised-button (click)="onSearchNowShowing()">
+            <mat-icon>search</mat-icon>Search
+          </button>
+        </div>
+        <div class="search-progress-bar" *ngIf="now_showing_searching;">
+          <mat-progress-bar fxFlex mode="indeterminate" color="accent"></mat-progress-bar>
+        </div>
+        <div *ngIf="!now_showing_searching;">
+          <app-now-showing-search-result [error]="now_showing_error"
+                                         [result]="now_showing_result"
+                                         [cinemas]="now_showing_cinemas"
+                                         (cinemas_required)="onSearchNowShowingCinemas($event)">
+            Loading...
+          </app-now-showing-search-result>
+        </div>
+      </div>
+      <div fxHide.xs fxFlex="3 3 10" fxFlex.gt-sm="20"></div>
+    </div>
   </mat-tab>
 </mat-tab-group>
-
