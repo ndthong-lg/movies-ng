@@ -10,9 +10,23 @@
       <div fxFlex.xs="100" fxFlex="80" fxFlex.gt-sm="60"
            fxLayout="column" fxLayoutAlign="space-around stretch"
            fxLayoutGap="0px" fxLayoutGap.lt-md="0px">
-        <app-movie-search fxFlex="100" [disabled]="movie_searching" (search)="onSearchMovie($event)"></app-movie-search>
-        <div style="height: 10px;" *ngIf="movie_searching||true;">
-          <mat-progress-bar  fxFlex mode="indeterminate" color="accent"></mat-progress-bar>
+        <app-movie-search [disabled]="movie_searching"
+                          (search)="onSearchMovie($event)">
+          Loading...
+        </app-movie-search>
+        <div class="search-progress-bar" *ngIf="movie_searching;">
+          <mat-progress-bar fxFlex mode="indeterminate" color="accent"></mat-progress-bar>
+        </div>
+        <div *ngIf="!movie_searching;">
+          <app-movie-search-result [data]="movie_search_data"
+                                   [paths]="movie_search_paths"
+                                   [result]="movie_search_result"
+                                   [error]="movie_search_error"
+                                   [genres]="movie_search_genres"
+                                   (retry)="onSearchMovieRetry()"
+                                   (page)="onSearchMoviePage($event)" >
+            Loading...
+          </app-movie-search-result>
         </div>
       </div>
       <div fxHide.xs fxFlex="3 3 10" fxFlex.gt-sm="20"></div>

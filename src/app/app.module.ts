@@ -8,11 +8,13 @@ import {AppMaterialModule} from "./material.module";
 import {MovieSearchComponent} from "./movie-search/movie-search.component";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
+import {MovieSearchResultComponent} from "./movie-search-result/movie-search-result.component";
 
 @NgModule({
   declarations: [
     AppComponent,
     MovieSearchComponent,
+    MovieSearchResultComponent,
   ],
   imports: [
     BrowserModule,

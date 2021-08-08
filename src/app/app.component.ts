@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {SearchData} from "./movie-search/movie-search.component";
 import {TheMovieDbSearchService} from "./themoviedb-search.service";
 import {MovieGluSearchService} from "./movieglu-search.service";
@@ -9,11 +9,14 @@ import {environment} from "../environments/environment";
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.sass']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'Movies Go'
   movie_searching = false
+  movie_search_data: any = undefined
   movie_search_result: any = undefined
   movie_search_error: any = undefined
+  movie_search_paths: string[] = []
+  movie_search_genres: any = {}
 
   now_showing_searching = false
   now_showing_result: any = undefined
@@ -26,6 +29,27 @@ export class AppComponent {
     this.nowShowingSearcher.auth = environment.movie_glu_auth
   }
 
+  ngOnInit() {
+    this.movieSearcher.getConfiguration().subscribe((config) => {
+      this.movie_search_paths.push(config.getPosterBaseURL(),
+        config.getProfileBaseURL(), config.getLogoBaseURL())
+    })
+
+    this.movieSearcher.getGenres().subscribe( (genres) => {
+      this.movie_search_genres = genres
+    })
+  }
+
+  onSearchMovieRetry() {
+    if (this.movie_search_data)
+      this.onSearchMovie(this.movie_search_data)
+  }
+
+  onSearchMoviePage(page: number) {
+    if (this.movie_search_data)
+      this.onSearchMovie(this.movie_search_data, page)
+  }
+
   onSearchMovieComplete(result: any) {
     this.movie_searching = false
     this.movie_search_result = result
@@ -36,10 +60,12 @@ export class AppComponent {
     this.movie_search_error = msg
   }
 
-  onSearchMovie(data: SearchData) {
+  onSearchMovie(data: SearchData, page: number = 1) {
+    this.movie_search_data = Object.assign({}, data)
+    this.movie_search_data.page = page
     this.movie_search_result = undefined
     this.movie_searching = true
-    this.movieSearcher.search(data)
+    this.movieSearcher.search(this.movie_search_data)
       .subscribe({
         next: (data) => this.onSearchMovieComplete(data),
         error: (err) => this.onSearchMovieError(err.message),

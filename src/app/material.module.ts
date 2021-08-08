@@ -6,6 +6,7 @@ import {MatInputModule} from "@angular/material/input";
 import {MatSelectModule} from "@angular/material/select";
 import {MatProgressBarModule} from "@angular/material/progress-bar";
 import {MatTabsModule} from "@angular/material/tabs";
+import {MatPaginatorModule} from "@angular/material/paginator";
 
 @NgModule({
   exports: [
@@ -16,6 +17,7 @@ import {MatTabsModule} from "@angular/material/tabs";
     MatSelectModule,
     MatProgressBarModule,
     MatTabsModule,
+    MatPaginatorModule,
   ]
 })
 export class AppMaterialModule { }
