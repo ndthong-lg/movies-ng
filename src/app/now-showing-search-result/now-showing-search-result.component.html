@@ -1,0 +1,42 @@
+<div fxLayout="column" fxLayoutAlign="start stretch"
+     fxLayoutGap="20px" fxLayout.lt-md="10px">
+  <div class="mat-primary" *ngIf="error"
+       fxLayout="column" fxLayoutAlign="start stretch" fxLayoutGap="20px">
+    <h3>Search Error</h3>
+    <div class="mat-error" fxLayout="row" fxLayoutAlign="start center">
+      <mat-icon>error</mat-icon> {{error}}
+    </div>
+  </div>
+
+  <div class="mat-primary" *ngIf="result" fxFlex="100"
+       fxLayout="column" fxLayoutAlign="start stretch" fxLayoutGap="20px">
+    <h3>Found {{ result.length }} Now-Showing(s)"</h3>
+    <div *ngFor="let r of result;" class="movie-item"
+         fxLayout="row wrap" fxLayoutAlign="start stretch" fxLayoutGap="5px">
+      <div fxShow fxHide.xs><img class="movie-poster" [src]="getPosterURL(r)"></div>
+      <div fxHide fxShow.xs><img class="movie-poster-xs" [src]="getPosterURL(r)"></div>
+      <div fxFlex.gt-xs="200px" fxLayout="column"
+           fxLayoutAlign="start stretch" fxLayoutGap="2px">
+        <div><h3>{{ r.film_name }}</h3></div>
+        <div>Release: {{ r.release_dates[0].release_date }}</div>
+        <div>Age Rating: {{ r.age_rating[0].rating }} - {{ r.age_rating[0].age_advisory }}</div>
+      </div>
+      <div fxFlex="180px" fxLayout="column" fxLayoutAlign="start stretch">
+        <div><h3>Cinemas To-Go <mat-icon>arrow_downward</mat-icon></h3></div>
+        <div *ngFor="let cinema of getCinemas(r.film_id);"
+             (click)="onCinemaSelected(r.film_id, { id: cinema.cinema_id, pos: { lat: cinema.lat, lng: cinema.lng } })"
+             [ngClass]="selected_cinemas[r.film_id] && selected_cinemas[r.film_id].id === cinema.cinema_id ? 'cinema-selected' : ''">
+          {{ cinema.cinema_name }}
+        </div>
+      </div>
+      <div fxFlex="300px">
+        map: {{ selected_cinemas[r.film_id] ? selected_cinemas[r.film_id].pos.lat : '' }}
+        <google-map height="300px" width="300px">
+          <map-marker *ngIf="selected_cinemas[r.film_id];"
+                      [position]="selected_cinemas[r.film_id].pos"></map-marker>
+        </google-map>
+      </div>
+    </div>
+  </div>
+</div>
+<p>now-showing-search-result works!</p>
