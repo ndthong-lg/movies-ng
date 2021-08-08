@@ -14,7 +14,7 @@ export class MovieSearchComponent implements OnInit {
   placeholders = new Map()
     .set('all', 'Enter keywords for movie search...')
     .set('title', 'Your favorite title')
-    .set('actor', 'Your favorite actors / actress')
+    .set('people', 'Your favorite people')
 
   searchData: SearchData = {
     searchType: 'title',

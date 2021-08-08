@@ -69,7 +69,7 @@ export class TheMovieDbSearchService {
     let response: Observable<any>
     if (data.searchType === 'title')
       response = this.searchTitle()
-    else if (data.searchType === 'actor')
+    else if (data.searchType === 'people')
       response = this.searchPeople()
     else
       response = this.searchKeyword()
