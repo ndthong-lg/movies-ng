@@ -43,10 +43,10 @@ export class MovieGluSearchService {
       )
   }
 
-  private closetShowingURL = 'https://api-gate2.movieglu.com/closetShowing'
-  searchClosetShowing(filmId: string, latitude: number, longitude: number): Observable<any> {
+  private closetShowingURL = 'https://api-gate2.movieglu.com/closestShowing'
+  searchClosetShowing(filmId: string, cinemas: number, latitude: string, longitude: string): Observable<any> {
     this.options.headers.geolocation = `${latitude};${longitude}`
-    return this.http.get(`${this.closetShowingURL}/?film_id=${filmId}`, this.options)
+    return this.http.get(`${this.closetShowingURL}/?film_id=${filmId}&n=${cinemas}`, this.options)
       .pipe(
         map( (data) => JSON.parse(JSON.stringify(data))),
         catchError( (err) => {
