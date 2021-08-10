@@ -5,10 +5,13 @@
 export const environment = {
   production: false,
 
-  the_movie_db_apikey: 'fb879fe0338562271f72d02b00cc0b60',
+  the_movie_db_apikey: '',
 
-  movie_glu_apikey: 'TMLxKNQSew5PiPS44NHve1dHreeKHXHm5X7OTdYM',
-  movie_glu_auth: 'Basic SE9NRV85Ok92a3liTVh5WWZIUQ==',
+  amc_theatres_apikey: '',
+  amc_theatres_apikey2: '',
+
+  movie_glu_apikey: '',
+  movie_glu_auth: '',
 
 };
 
